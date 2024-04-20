@@ -94,15 +94,35 @@
     </div>
 </div>
 <script>
-    //Khởi tạo một bảng puzzle gồm các mảnh đã xáo trộn ngẫu nhiên
-    var pos  = [1,2,3,4,5,6,7,8,9];
-    for (var i = 0; i < 8; i++) {
-        const j = Math.floor(Math.random() * (8 - i)) + i + 1;
-        [pos[i], pos[j]] = [pos[j], pos[i]];
+    var pos = [1,2,3,4,5,6,7,8,9];
+    Hàm khởi tạo trạng thái ban đầu của bảng puzzle bằng cách di chuyển ngẫu nhiên 20 bước từ trạng thái gốc
+    function initializePuzzle() {
+        var blank = 2;
+
+        // Hàm lấy các bước di chuyển hợp lệ từ vị trí của ô trống
+        function getValidMoves(blank) {
+            var validMoves = [];
+            if (blank % 3 != 0) validMoves.push(blank - 1); // Di chuyển sang trái
+            if (blank % 3 != 2) validMoves.push(blank + 1); // Di chuyển sang phải
+            if (blank > 2) validMoves.push(blank - 3); // Di chuyển lên trên
+            if (blank < 6) validMoves.push(blank + 3); // Di chuyển xuống dưới
+            return validMoves;
+        }
+
+        for (var i = 0; i < 20; i++) {
+            var validMoves = getValidMoves(blank);
+            var randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
+            var temp = pos[blank];
+            pos[blank] = pos[randomMove];
+            pos[randomMove] = temp;
+            blank = randomMove;
+        }
+        for (var i = 1; i < 10; i++) {
+            document.getElementById("ImagePart"+i).src = "Images/Image" + pos[i-1] + ".jpg";
+        }
     }
-    for (var i = 1; i < 10; i++) {
-        document.getElementById("ImagePart"+i).src = "Images/Image" + pos[i-1] + ".jpg";
-    }
+
+    initializePuzzle();
 
     //Hàm lấy số thứ tự của ảnh mà ô hiện tại đang chứa
     function getNum(part) {
@@ -111,8 +131,9 @@
 
     //Hàm hoán đổi vị trí ảnh của hai ô kề nhau
     function swapImage(part1,part2) {
-        document.getElementById("ImagePart"+part2).src = "Images/Image" + getNum(part1) + ".jpg";
-        document.getElementById("ImagePart"+part1).src = "Images/Image3.jpg";
+        temp = getNum(part1);
+        document.getElementById("ImagePart"+part1).src = "Images/Image" + getNum(part2) + ".jpg";
+        document.getElementById("ImagePart"+part2).src = "Images/Image" + temp + ".jpg";
     }
 
     //Kiểm tra xem tất cả các mảnh đã xếp vào đúng chỗ hay chưa
