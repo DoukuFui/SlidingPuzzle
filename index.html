@@ -147,10 +147,9 @@
         }
         if (check == 1) {
             setTimeout(() => {
-                console.log("Thông báo sau 2 giây!");
-            }, 2000);
-            alert("You won!");
-            location.reload();
+                alert("You won!");
+                location.reload();
+            }, 1000);
         }
     }
 
@@ -200,7 +199,6 @@
                 if (getNum(8) == 3) swapImage(9,8);
                 break;
         }
-        setTimeout(() => {}, 1000);
         checkPos();
     }
 </script>
